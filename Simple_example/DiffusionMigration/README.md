@@ -1,0 +1,3 @@
+Transport of particles due to diffusion and migration
+Transport of fluid due to Navier-Stokes 
+No transport of heat
