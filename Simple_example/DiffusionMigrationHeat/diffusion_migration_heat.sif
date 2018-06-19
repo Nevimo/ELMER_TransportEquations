@@ -1,0 +1,205 @@
+Header
+  CHECK KEYWORDS Warn
+  Mesh DB "." "."
+  Include Path ""
+  Results Directory ""
+End
+
+Simulation
+  Max Output Level = 4
+  Coordinate System = Cartesian
+  Coordinate Mapping(3) = 1 2 3
+  Simulation Type = Steady state
+  Steady State Max Iterations = 10
+  Output Intervals = 1
+  Timestepping Method = BDF
+  BDF Order = 1
+  Timestep intervals = 10000
+  Timestep Sizes = 20
+  Solver Input File = case.sif
+  Post File = case.vtu
+End
+
+Constants
+  Gravity(4) = 0 -1 0 9.82
+  Stefan Boltzmann = 5.67e-08
+  Permittivity of Vacuum = 8.8542e-12
+  Boltzmann Constant = 1.3807e-23
+  Unit Charge = 1.602e-19
+End
+
+Body 1
+  Target Bodies(1) = 5
+  Name = "Body 1"
+  Equation = 1
+  Material = 1
+  Body Force = 1
+  Initial condition = 1
+End
+
+Solver 2
+  Equation = SaveScalars
+  Coefficient 4 = conc
+  Variable 1 = Time
+  Filename = case.dat
+  Variable 5 = Potential
+  Procedure = "SaveData" "SaveScalars"
+  Variable 3 = Concentration
+  Variable 4 = Velocity
+  Variable 2 = Concentration
+  Operator 3 = diffusive flux
+  Operator 2 = int
+  Coefficient 3 = diff
+  Operator 5 = diffusive flux
+  Operator 4 = convective flux
+  Coefficient 5 = k
+  Exec Solver = After Timestep
+End
+
+Solver 5
+  Equation = Advection Diffusion Equation
+  Procedure = "AdvectionDiffusion" "AdvectionDiffusionSolver"
+  Variable = -dofs 1 Concentration
+  Exec Solver = Always
+  Stabilize = True
+  Bubbles = False
+  Lumped Mass Matrix = False
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-8
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Direct
+  Linear System Direct Method = Umfpack
+End
+
+Solver 1
+  Equation = Static Current Conduction
+  Variable = -dofs 1 Potential
+  Procedure = "StatCurrentSolve" "StatCurrentSolver"
+  Exec Solver = Always
+  Stabilize = True
+  Bubbles = False
+  Lumped Mass Matrix = False
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-8
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Direct
+  Linear System Direct Method = Umfpack
+End
+
+Solver 4
+  Equation = Heat Equation
+  Procedure = "HeatSolve" "HeatSolver"
+  Variable = Temperature
+  Exec Solver = Always
+  Stabilize = True
+  Bubbles = False
+  Lumped Mass Matrix = False
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-8
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Iterative
+  Linear System Iterative Method = BiCGStab
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-8
+  Linear System Preconditioning = ILU0
+  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Abort Not Converged = False
+  Linear System Residual Output = 1
+  Linear System Precondition Recompute = 1
+End
+
+Solver 3
+  Equation = Navier-Stokes
+  Procedure = "FlowSolve" "FlowSolver"
+  Variable = Flow Solution[Velocity:2 Pressure:1]
+  Exec Solver = Always
+  Stabilize = True
+  Bubbles = False
+  Lumped Mass Matrix = False
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-8
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Iterative
+  Linear System Iterative Method = BiCGStab
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-8
+  Linear System Preconditioning = ILU0
+  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Abort Not Converged = False
+  Linear System Residual Output = 1
+  Linear System Precondition Recompute = 1
+End
+
+Equation 1
+  Name = "Electrolyte"
+  Concentration Units = Absolute Mass
+  Convection = Computed
+  Concentration Convection = Computed
+  Active Solvers(5) = 2 5 1 4 3
+End
+
+Material 1
+  Name = "Copper sulfate solution"
+  Electric Conductivity = 0.024
+  Heat Conductivity = .6
+  Concentration Ion Charge = 2
+  Reference Temperature = 298
+  Heat Capacity = 4184
+  Density = 1000
+  Viscosity = .001
+  Heat expansion Coefficient = 1e-4
+  Concentration Diffusivity = 1e-9
+  diff=Real $-1e-9
+  conc=Variable Concentration
+    Real MATC "tx"
+  k= Variable Concentration
+    Real MATC "(tx*1e-9*2*1.602e-19)/(298*1.3807e-23)"
+End
+
+Body Force 1
+  Name = "Natural Convection"
+  Boussinesq = True
+  Joule Heat = True
+End
+
+Initial Condition 1
+  Name = "Initial concentration in kg/m2"
+  Concentration = 0
+  Temperature = 298
+End
+
+Boundary Condition 1
+  Target Boundaries(1) = 3 
+  Name = "Anode"
+  Noslip wall BC = True
+  Potential = 0.1
+  Temperature = 298
+  Save Scalars = True
+  Concentration = 0.1
+End
+
+Boundary Condition 2
+  Target Boundaries(1) = 4 
+  Name = "Cathode"
+  Noslip wall BC = True
+  Potential = 0
+  Temperature = 298
+  Save Scalars = True
+  Concentration = 0
+End
