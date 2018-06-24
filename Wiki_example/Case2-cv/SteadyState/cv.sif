@@ -45,9 +45,11 @@ Solver 2
   Filename = case.dat
   Procedure = "SaveData" "SaveScalars"
   Variable 3 = Time
-  Variable 4 = Temperature
+  Variable 4 = Velocity
+  Operator 4 = convective flux
   Variable 2 = Potential
   Operator 2 = diffusive flux
+  Coefficient 4 = conc
   Coefficient 2 = k
   Exec Solver = After Timestep
 End
