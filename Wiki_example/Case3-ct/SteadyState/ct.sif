@@ -44,7 +44,7 @@ Solver 2
   Variable 1 = Concentration
   Filename = case.dat
   Procedure = "SaveData" "SaveScalars"
-  Variable 2 = Concentration
+  Variable 2 = Velocity
   Operator 2 = convective flux
   Coefficient 2 = conc
   Exec Solver = After Timestep
