@@ -139,7 +139,7 @@ Material 1
   Concentration Diffusivity = 1e-9
   diff=Real $-1e-9
   k= Variable Concentration
-    Real MATC "(tx*1e-9*2*1.602e-19)/(298*1.3807e-23)"
+    Real MATC "-(tx*1e-9*2*1.602e-19)/(298*1.3807e-23)"
   conc=Variable Concentration
     Real MATC "tx"
 End
