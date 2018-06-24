@@ -1,0 +1,20 @@
+Elmer version: 8.3
+Elmer revision: c30fff2
+Elmer compilation date: 2017-05-22
+File started at: 2018/06/24 06:12:37
+ 
+Variables in columns of matrix: ./case.dat
+   1: diffusive flux: concentration over bc 1
+   2: diffusive flux:  over bc 2
+   3: diffusive flux:  over bc 3
+   4: diffusive flux:  over bc 4
+   5: diffusive flux:  over bc 5
+   6: min diffusive flux:
+   7: max diffusive flux:
+   8: convective flux: concentration over bc 1
+   9: convective flux:  over bc 2
+  10: convective flux:  over bc 3
+  11: convective flux:  over bc 4
+  12: convective flux:  over bc 5
+  13: min convective flux:
+  14: max convective flux:
