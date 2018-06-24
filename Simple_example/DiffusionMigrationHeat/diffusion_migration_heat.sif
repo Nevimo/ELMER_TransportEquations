@@ -169,7 +169,7 @@ Material 1
   conc=Variable Concentration
     Real MATC "tx"
   k=Variable Concentration,Temperature
-    Real MATC "(tx(0)*1e-9*2*1.602e-19)/(tx(1)*1.3807e-23)"
+    Real MATC "-(tx(0)*1e-9*2*1.602e-19)/(tx(1)*1.3807e-23)"
 End
 
 Body Force 1
